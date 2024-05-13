@@ -1,0 +1,56 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+nav button {
+    background-color: #555;
+    border: none;
+    color: white;
+    padding: 10px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+nav button:hover {
+    background-color: #777;
+}
+
+main {
+    padding: 20px;
+    text-align: center;
+}
+
+input, button {
+    padding: 8px;
+    margin: 10px;
+}
+
+form {
+    background-color: #f2f2f2;
+    display: inline-block;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
