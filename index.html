@@ -10,14 +10,18 @@
 <body>
     <div id="app">
         <header>
-            <h1>Memórias do Tempo</h1>
-            <nav>
-                <button v-on:click="showView('home')">Início</button>
-                <button v-on:click="showView('addProduct')">Cadastrar Produto</button>
-                <button v-on:click="showView('register')">Cadastro</button>
-                <button v-on:click="showView('login')">Login</button>
+            <div class="logo">
+                <h1>Memórias do Tempo</h1>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar...">
+            </div>
+            <nav class="nav-buttons">
+                <button v-on:click="showView('login')">Entrar</button>
+                <button v-on:click="showView('register')">Cadastrar</button>
             </nav>
         </header>
+        
         <main>
             <login-form v-if="currentView === 'login'"></login-form>
             <register-form v-if="currentView === 'register'"></register-form>
