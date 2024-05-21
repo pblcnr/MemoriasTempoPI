@@ -1,56 +1,114 @@
-body, html {
+body {
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    box-sizing: border-box;
 }
 
 header {
     background-color: #333;
     color: white;
-    padding: 10px 20px;
-    text-align: center;
+    padding: 10px 0;
 }
 
-nav button {
-    background-color: #555;
-    border: none;
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+nav .logo a {
     color: white;
-    padding: 10px;
-    margin: 0 5px;
-    cursor: pointer;
+    text-decoration: none;
+    font-size: 1.5em;
+    font-weight: bold;
 }
 
-nav button:hover {
-    background-color: #777;
+nav .logo img{
+    width: 100%;
+    height: 100px;
+}
+
+nav .search input {
+    padding: 5px;
+    font-size: 1em;
+    width: 300px;
+    max-width: 100%;
+}
+
+nav .contact a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 20px;
 }
 
 main {
     padding: 20px;
-    text-align: center;
-}
-
-input, button {
-    padding: 8px;
-    margin: 10px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 form {
-    background-color: #f2f2f2;
-    display: inline-block;
-    padding: 20px;
-    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
+form label {
+    margin-top: 10px;
 }
 
-table, th, td {
-    border: 1px solid #ddd;
-}
-
-th, td {
+form input, form textarea, form select {
+    margin-top: 5px;
     padding: 8px;
-    text-align: left;
+    font-size: 1em;
+}
+
+form button {
+    margin-top: 20px;
+    padding: 10px;
+    font-size: 1em;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+.pesquisa{
+    border-radius: px;
+}
+
+.produtos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.produto {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.produto img {
+    max-width: 100%;
+    height: auto;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+@media (max-width: 600px) {
+    nav .search input {
+        width: 100%;
+    }
 }

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Produtos Cadastrados</title>
+    <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="container-fluid">
+        <ul>
+            <li><strong>Memórias do Tempo</strong></li>
+        </ul>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="produtos.html">Produtos</a></li>
+            <li><a href="cadastro.html" role="button">Cadastrar Produto</a></li>
+        </ul>
+    </nav>
+    <main class="container">
+        <div class="grid">
+            <section>
+                <hgroup>
+                    <h2>Produtos Cadastrados</h2>
+                    <h3>Lista de produtos disponíveis</h3>
+                </hgroup>
+                <div id="productList">
+                    <!-- Produtos serão listados aqui dinamicamente -->
+                </div>
+            </section>
+        </div>
+    </main>
+    <footer class="container">
+        <small><a href="#">Política de Privacidade</a> • <a href="#">Termos de Uso</a></small>
+    </footer>
+
+    <script>
+        function loadProducts() {
+            fetch('/products')
+            .then(response => response.json())
+            .then(products => {
+                const productList = document.getElementById('productList');
+                productList.innerHTML = '';
+                products.forEach(product => {
+                    const productItem = document.createElement('div');
+                    productItem.innerHTML = `
+                        <h4>${product.name}</h4>
+                        <p>${product.description}</p>
+                        <p>Categoria: ${product.category}</p>
+                        <p>Preço: ${product.price}</p>
+                        <p>Estoque: ${product.stock}</p>
+                        <img src="${product.image}" alt="${product.name}" />
+                    `;
+                    productList.appendChild(productItem);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        document.addEventListener('DOMContentLoaded', loadProducts);
+    </script>
+</body>
+</html>

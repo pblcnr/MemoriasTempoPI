@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cadastro de Produtos</title>
+    <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="container-fluid">
+        <ul>
+            <li><strong>Memórias do Tempo</strong></li>
+        </ul>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="produtos.html">Produtos</a></li>
+            <li><a href="cadastro.html" role="button">Cadastrar Produto</a></li>
+        </ul>
+    </nav>
+    <main class="container">
+        <div class="grid">
+            <section>
+                <hgroup>
+                    <h2>Cadastro de Produtos</h2>
+                    <h3>Adicione novos produtos ao catálogo</h3>
+                </hgroup>
+                <form id="productForm">
+                    <input type="text" id="name" name="name" placeholder="Nome do Produto" aria-label="Nome do Produto" required>
+                    <input type="text" id="description" name="description" placeholder="Descrição" aria-label="Descrição" required>
+                    <input type="text" id="category" name="category" placeholder="Categoria" aria-label="Categoria" required>
+                    <input type="number" id="price" name="price" placeholder="Preço de Venda" aria-label="Preço de Venda" required>
+                    <input type="number" id="stock" name="stock" placeholder="Estoque" aria-label="Estoque" required>
+                    <input type="file" id="image" name="image" aria-label="Imagem do Produto" required>
+                    <button type="submit">Cadastrar Produto</button>
+                </form>
+            </section>
+        </div>
+    </main>
+    <footer class="container">
+        <small><a href="#">Política de Privacidade</a> • <a href="#">Termos de Uso</a></small>
+    </footer>
+
+    <script>
+        document.getElementById('productForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            fetch('/addProduct', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                this.reset();
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

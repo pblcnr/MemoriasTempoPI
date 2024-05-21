@@ -1,87 +1,42 @@
-const { createApp, ref } = Vue;
+const express = require('express');
+const mysql = require('mysql');
+const bodyParser = require('body-parser');
+const app = express();
 
-const app = createApp({
-    data() {
-        return {
-            currentView: 'home',
-            products: []
-        };
-    },
-    methods: {
-        showView(view) {
-            this.currentView = view;
-        },
-        addProduct(product) {
-            this.products.push(product);
-            this.showView('home');
-        }
-    }
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'memorias_do_tempo'
 });
 
-app.component('login-form', {
-    template: `
-        <form>
-            <h2>Login</h2>
-            <input type="email" placeholder="Email">
-            <input type="password" placeholder="Senha">
-            <button type="submit">Entrar</button>
-        </form>
-    `
+db.connect((err) => {
+    if (err) throw err;
+    console.log('Connected to database');
 });
 
-app.component('register-form', {
-    template: `
-        <form>
-            <h2>Cadastro</h2>
-            <input type="text" placeholder="Nome completo">
-            <input type="email" placeholder="Email">
-            <input type="password" placeholder="Senha">
-            <button type="submit">Registrar</button>
-        </form>
-    `
+app.post('/addProduct', (req, res) => {
+    const { name, description, category, price, stock } = req.body;
+    const image = req.file; // Assume that image upload is handled separately
+
+    const query = 'INSERT INTO products (name, description, category, price, stock, image) VALUES (?, ?, ?, ?, ?, ?)';
+    db.query(query, [name, description, category, price, stock, image], (err, result) => {
+        if (err) throw err;
+        res.send('Product added successfully');
+    });
 });
 
-app.component('product-form', {
-    template: `
-        <form @submit.prevent="submit">
-            <h2>Cadastrar Produto</h2>
-            <input type="text" placeholder="Nome do Produto" v-model="product.name">
-            <input type="text" placeholder="Descrição" v-model="product.description">
-            <input type="number" placeholder="Preço" v-model="product.price">
-            <button type="submit">Adicionar Produto</button>
-        </form>
-    `,
-    data() {
-        return {
-            product: { name: '', description: '', price: 0 }
-        };
-    },
-    methods: {
-        submit() {
-            this.$emit('add-product', { ...this.product });
-        }
-    }
+app.get('/products', (req, res) => {
+    const query = 'SELECT * FROM products';
+    db.query(query, (err, results) => {
+        if (err) throw err;
+        res.json(results);
+    });
 });
 
-app.component('product-list', {
-    template: `
-        <div>
-            <h2>Produtos Disponíveis</h2>
-            <table>
-                <tr>
-                    <th>Nome</th>
-                    <th>Descrição</th>
-                    <th>Preço</th>
-                </tr>
-                <tr v-for="product in products" :key="product.name">
-                    <td>{{ product.name }}</td>
-                    <td>{{ product.description }}</td>
-                    <td>{{ product.price }}</td>
-                </tr>
-            </table>
-        </div>
-    `,
-    props: ['products']
+app.listen(3000, () => {
+    console.log('Server running on port 3000');
 });
-
-app.mount('#app');

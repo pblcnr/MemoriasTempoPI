@@ -1,35 +1,35 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Memórias do Tempo</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" rel="stylesheet">
 </head>
 <body>
-    <div id="app">
-        <header>
-            <div class="logo">
-                <h1>Memórias do Tempo</h1>
-            </div>
-            <div class="search-bar">
-                <input type="text" placeholder="Buscar...">
-            </div>
-            <nav class="nav-buttons">
-                <button v-on:click="showView('login')">Entrar</button>
-                <button v-on:click="showView('register')">Cadastrar</button>
-            </nav>
-        </header>
-        
-        <main>
-            <login-form v-if="currentView === 'login'"></login-form>
-            <register-form v-if="currentView === 'register'"></register-form>
-            <product-form v-if="currentView === 'addProduct'"></product-form>
-            <product-list v-if="currentView === 'home'"></product-list>
-        </main>
-    </div>
-
+    <nav class="container-fluid">
+        <ul>
+            <li><strong>Memórias do Tempo</strong></li>
+        </ul>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="produtos.html">Produtos</a></li>
+            <li><a href="cadastro.html" role="button">Cadastrar Produto</a></li>
+        </ul>
+    </nav>
+    <main class="container">
+        <div class="grid">
+            <section>
+                <hgroup>
+                    <h2>Bem-vindo ao Memórias do Tempo</h2>
+                    <h3>Seu refúgio para amantes da história e nostalgia</h3>
+                </hgroup>
+                <p>Explore nossos produtos cadastrados ou adicione novos ao catálogo.</p>
+            </section>
+        </div>
+    </main>
+    <footer class="container">
+        <small><a href="#">Política de Privacidade</a> • <a href="#">Termos de Uso</a></small>
+    </footer>
 </body>
 </html>
-<script src="index.js"></script>
