@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cadastro de Produtos</title>
+    <title>Login</title>
     <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" rel="stylesheet">
 </head>
 <body>
@@ -23,17 +23,13 @@
         <div class="grid">
             <section>
                 <hgroup>
-                    <h2>Cadastro de Produtos</h2>
-                    <h3>Adicione novos produtos ao catálogo</h3>
+                    <h2>Login</h2>
+                    <h3>Acesse sua conta</h3>
                 </hgroup>
-                <form id="productForm">
-                    <input type="text" id="name" name="name" placeholder="Nome do Produto" aria-label="Nome do Produto" required>
-                    <input type="text" id="description" name="description" placeholder="Descrição" aria-label="Descrição" required>
-                    <input type="text" id="category" name="category" placeholder="Categoria" aria-label="Categoria" required>
-                    <input type="number" id="price" name="price" placeholder="Preço de Venda" aria-label="Preço de Venda" required>
-                    <input type="number" id="stock" name="stock" placeholder="Estoque" aria-label="Estoque" required>
-                    <input type="file" id="image" name="image" aria-label="Imagem do Produto" required>
-                    <button type="submit">Cadastrar Produto</button>
+                <form id="loginForm">
+                    <input type="text" id="username" name="username" placeholder="Nome de Usuário" aria-label="Nome de Usuário" required>
+                    <input type="password" id="password" name="password" placeholder="Senha" aria-label="Senha" required>
+                    <button type="submit">Login</button>
                 </form>
             </section>
         </div>
@@ -43,18 +39,20 @@
     </footer>
 
     <script>
-        document.getElementById('productForm').addEventListener('submit', function (e) {
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
             e.preventDefault();
 
             const formData = new FormData(this);
-            fetch('/addProduct', {
+            fetch('/loginUser', {
                 method: 'POST',
                 body: formData
             })
             .then(response => response.text())
             .then(data => {
                 alert(data);
-                this.reset();
+                if (data === 'Login successful') {
+                    window.location.href = 'index.html';
+                }
             })
             .catch(error => console.error('Error:', error));
         });
