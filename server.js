@@ -34,4 +34,16 @@ app.get('/produtos', async (req, res) => {
     }
 })
 
-app.post()
+app.post('/produtos', async (req, res) => {
+    const {nome, descricao, categoria, precoVenda, estoque, imagem} = req.body;
+    try {
+        await sql.query`INSERT INTO Produtos (nome, descricao, categoria, precoVenda, estoque, imagem) VALUES (${nome}, ${descricao}, ${categoria}, ${precoVenda}, ${estoque}, ${imagem})`;
+        res.status(201).send('Produto criado com sucesso!');
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+app.listen(port, () => {
+    console.log(`Servidor rodando em http://localhost:${port}`);
+});
