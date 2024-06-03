@@ -1,42 +1,83 @@
 const express = require('express');
-const mysql = require('mysql');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+const sql = require('mssql');
+const multer = require('multer');
+
 const app = express();
+const port = 3000;
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'memorias_do_tempo'
+const dbConfig = {
+    user: 'username',
+    password: 'senha',
+    server: 'localhost',
+    database: 'bancoDeDados',
+    options: {
+        encrypt: true,
+        trustServerCertificate: true,
+    },
+};
+
+sql.connect(dbConfig, (err) => {
+    if (err) console.log(err);
+    else console.log('Conectado ao banco de dados!')
 });
 
-db.connect((err) => {
-    if (err) throw err;
-    console.log('Connected to database');
+// Configurar multer para upload de arquivos
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+// Rota para cadastrar usuário
+app.post('/registerUser', async (req, res) => {
+    const { username, email, password } = req.body;
+    try {
+        const pool = await sql.connect();
+        const result = await pool.request()
+            .input('username', sql.VarChar, username)
+            .input('email', sql.VarChar, email)
+            .input('password', sql.VarChar, password)
+            .query('INSERT INTO Users (Username, Email, Password) VALUES (@username, @email, @password)');
+        res.send('Usuário cadastrado com sucesso!');
+    } catch (err) {
+        console.error('SQL error', err);
+        res.status(500).send('Erro ao cadastrar usuário');
+    }
 });
 
-app.post('/addProduct', (req, res) => {
+// Rota para cadastrar produto
+app.post('/addProduct', upload.single('image'), async (req, res) => {
     const { name, description, category, price, stock } = req.body;
-    const image = req.file; // Assume that image upload is handled separately
-
-    const query = 'INSERT INTO products (name, description, category, price, stock, image) VALUES (?, ?, ?, ?, ?, ?)';
-    db.query(query, [name, description, category, price, stock, image], (err, result) => {
-        if (err) throw err;
-        res.send('Product added successfully');
-    });
+    const image = req.file;
+    try {
+        const pool = await sql.connect();
+        const result = await pool.request()
+            .input('name', sql.VarChar, name)
+            .input('description', sql.VarChar, description)
+            .input('category', sql.VarChar, category)
+            .input('price', sql.Decimal, price)
+            .input('stock', sql.Int, stock)
+            .input('image', sql.VarBinary, image.buffer)
+            .query('INSERT INTO Products (Name, Description, Category, Price, Stock, Image) VALUES (@name, @description, @category, @price, @stock, @image)');
+        res.send('Produto cadastrado com sucesso!');
+    } catch (err) {
+        console.error('SQL error', err);
+        res.status(500).send('Erro ao cadastrar produto');
+    }
 });
 
-app.get('/products', (req, res) => {
-    const query = 'SELECT * FROM products';
-    db.query(query, (err, results) => {
-        if (err) throw err;
-        res.json(results);
-    });
+// Rota para listar produtos
+app.get('/produtos', async (req, res) => {
+    try {
+        const result = await sql.query`SELECT * FROM Produtos`;
+        res.json(result.recordset);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
 });
 
-app.listen(3000, () => {
-    console.log('Server running on port 3000');
+app.listen(port, () => {
+    console.log(`Servidor rodando em http://localhost:${port}`);
 });
