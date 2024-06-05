@@ -10,10 +10,13 @@ O projeto "Memórias do Tempo" é um site web com conexão a um banco de dados r
 2. [Requisitos do Sistema](#requisitos-do-sistema)
    - [Funcionais](#funcionais)
    - [Não Funcionais](#não-funcionais)
-3. [Tecnologias Utilizadas](#tecnologias-utilizadas)
-4. [Funcionalidades](#funcionalidades)
-5. [Equipe](#equipe)
-6. [Licença](#licença)
+3. [Arquitetura do Sistema](#arquitetura-do-sistema)    
+    - [Tecnologias Utilizadas](#tecnologias-utilizadas)
+4. [Estrutura do Banco de Dados](#estrutura-do-banco-de-dados)
+    - [Descrição das Tabelas](#descrição-das-tabelas)
+5. [Funcionalidades](#funcionalidades)
+6. [Equipe](#equipe)
+7. [Licença](#licença)
 
 ## Introdução
 
