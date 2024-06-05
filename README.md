@@ -31,10 +31,14 @@ O projeto "Memórias do Tempo" visa proporcionar um sistema eficiente para o ger
 - Segurança dos dados
 - Performance e escalabilidade
 
+## Arquitetura do Sistema
+
 ### Tecnologias Utilizadas
 - **Frontend:** HTML, CSS, JavaScript, React.js
 - **Backend:** Node.js, Express.js
 - **Banco de Dados:** MySQL
+
+## Estrutura do Banco de Dados
 
 ### Descrição das Tabelas
 - **Tabela `Produtos`:**
