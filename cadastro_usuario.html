@@ -44,9 +44,17 @@
             e.preventDefault();
 
             const formData = new FormData(this);
+            const jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+
             fetch('/registerUser', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonData)
             })
             .then(response => response.text())
             .then(data => {
@@ -56,5 +64,6 @@
             .catch(error => console.error('Error:', error));
         });
     </script>
+    
 </body>
 </html>
