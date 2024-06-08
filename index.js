@@ -46,6 +46,25 @@ app.post('/registerUser', async (req, res) => {
     }
 });
 
+// Rota para Login
+app.post('/loginUser', async (req, res) => {
+    const { username, password } = req.body;
+    try {
+        const result = await pool.query(
+            'SELECT * FROM users WHERE username = $1 AND password = $2',
+            [username, password]
+        );
+        if (result.rows.length > 0) {
+            res.send('Login realizado com Sucesso.');
+        } else {
+            res.status(401).send('Credenciais inválidas.');
+        }
+    } catch (err) {
+        console.error('Erro no SQL', err);
+        res.status(500).send('Erro ao realizar login');
+    }
+})
+
 // Rota para cadastrar produto
 app.post('/addProduct', upload.single('image'), async (req, res) => {
     const { name, description, category, price, stock } = req.body;
