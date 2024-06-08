@@ -13,10 +13,10 @@ app.use(cors());
 app.use(express.static(path.join(__dirname))); // Serve arquivos estáticos no mesmo diretório
 
 const dbConfig = {
-    user: 'username',
+    user: 'postgres',
     host: 'localhost',
-    database: 'bancoDeDados',
-    password: 'senha',
+    database: 'Memorias',
+    password: '123456',
     port: 5432,
 };
 
@@ -65,7 +65,7 @@ app.post('/addProduct', upload.single('image'), async (req, res) => {
 // Rota para listar produtos
 app.get('/produtos', async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM Produtos');
+        const result = await pool.query('SELECT * FROM products');
         res.json(result.rows);
     } catch (err) {
         res.status(500).send(err.message);

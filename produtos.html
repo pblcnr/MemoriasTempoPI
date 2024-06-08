@@ -37,29 +37,27 @@
     </footer>
 
     <script>
-        function loadProducts() {
-            fetch('/products')
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/produtos')
             .then(response => response.json())
-            .then(products => {
+            .then(data => {
                 const productList = document.getElementById('productList');
                 productList.innerHTML = '';
-                products.forEach(product => {
+                data.forEach(product => {
                     const productItem = document.createElement('div');
                     productItem.innerHTML = `
                         <h4>${product.name}</h4>
                         <p>${product.description}</p>
                         <p>Categoria: ${product.category}</p>
-                        <p>Preço: ${product.price}</p>
+                        <p>Preço: R$${product.price}</p>
                         <p>Estoque: ${product.stock}</p>
                         <img src="${product.image}" alt="${product.name}" />
                     `;
                     productList.appendChild(productItem);
                 });
             })
-            .catch(error => console.error('Error:', error));
-        }
-
-        document.addEventListener('DOMContentLoaded', loadProducts);
+            .catch(error => console.error('Error:', error))
+        });
     </script>
 </body>
 </html>
