@@ -1,3 +1,13 @@
+const { createClient } =  require('@supabase/supabase-js')
+
+// Create a single supabase client for interacting with your database
+const supabase = createClient('https://kdpudcopdpacbpqpkdci.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkcHVkY29wZHBhY2JwcXBrZGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTgxMzgwOTUsImV4cCI6MjAzMzcxNDA5NX0.eJtCmT9luu5f2kJujZl9BMmatRrqULL69N5UpUj7xTs')
+
+// MemoriaTempo12345678$
+// postgres://postgres.kdpudcopdpacbpqpkdci:[YOUR-PASSWORD]@aws-0-sa-east-1.pooler.supabase.com:6543/postgres
+// project URL:  https://kdpudcopdpacbpqpkdci.supabase.co
+// Ano public key:  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkcHVkY29wZHBhY2JwcXBrZGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTgxMzgwOTUsImV4cCI6MjAzMzcxNDA5NX0.eJtCmT9luu5f2kJujZl9BMmatRrqULL69N5UpUj7xTs
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -30,8 +40,9 @@ pool.connect((err) => {
 });
 
 // Configurar multer para upload de arquivos
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+//const storage = multer.memoryStorage();
+//const upload = multer({ storage: storage });
+const upload = multer({ dest: 'imgs/' });
 
 // Rota para cadastrar usuário
 app.post('/registerUser', async (req, res) => {
@@ -67,19 +78,19 @@ app.post('/loginUser', async (req, res) => {
     }
 })
 
+// app.post('v2/addProduct')...
+
 // Rota para cadastrar produto
 app.post('/addProduct', upload.single('image'), async (req, res) => {
     const { name, description, category, price, stock } = req.body;
-    const image = req.file;
+    //const image = req.file;
+    //const ext = req.file.mimetype.split('/')[1];
+    const filename = req.file.filename; 
+    const optimizedImageBuffer = null;
     try {
-        // Otimizar imagem
-        const optimizedImageBuffer = await sharp(image.buffer)
-        .resize(800) // Redimensionar para largura de 800px
-        .jpeg({ quality: 80 }) // Comprimir para qualidade de 80
-        .toBuffer(); // Converter de volta para Buffer
         const result = await pool.query(
-            'INSERT INTO Products (Name, Description, Category, Price, Stock, Image) VALUES ($1, $2, $3, $4, $5, $6)',
-            [name, description, category, price, stock, optimizedImageBuffer]
+            'INSERT INTO Products (Name, Description, Category, Price, Stock, Image, imageURL) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+            [name, description, category, price, stock, optimizedImageBuffer, filename]
         );
         res.send('Produto cadastrado com sucesso!');
     } catch (err) {
@@ -99,6 +110,19 @@ app.get('/produtos', async (req, res) => {
         res.json(produtos);
     } catch (err) {
         res.status(500).send(err.message);
+    }
+});
+
+// Rota para conexão on-line - supabase
+app.get('/supabase', async (req, res) => {
+    try {
+        const { data, error } = await supabase
+        .from('products')
+        .select();
+    res.status(200).send(data)
+        console.log(data)
+    } catch (error) {
+        res.status(500).send(error.message)
     }
 });
 
@@ -126,16 +150,25 @@ app.get('/produtos', async (req, res) => {
 app.get('/img/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const result = await pool.query('SELECT Image FROM products WHERE id = $1', [id]);
-        if (result.rows.length > 0) {
+        //const result = await pool.query('SELECT encode(image::bytea, "base64") FROM products WHERE id = $1', [id]);
+        const result = await pool.query('SELECT imageurl FROM products WHERE id = $1', [id]);
+/*        if (result.rows.length > 0) {
             const image = result.rows[0].image;
-            const imageBase64 = `data:image/jpeg;base64,${image.toString('base64')}`;
-            res.send(imageBase64);
+            if (Buffer.isBuffer(image)) {
+                const imageBase64 = `data:image/jpeg;base64,${image.toString('base64')}`;
+                res.send(imageBase64);
+            } else {
+                console.error(`Erro: a imagem do produto ${id} não é um Buffer.`);
+                res.status(500).send('Erro ao converter a imagem para base64');
+            }
         } else {
             res.status(404).send('Imagem não encontrada');
-        }
+        }*/
+       res.send(result.rows[0].imageurl);
+       console.log(result.rows.im);
     } catch (err) {
-        res.status(500).send(err.message);
+        console.error('Erro ao buscar a imagem:', err);
+        res.status(500).send('Erro ao buscar a imagem');
     }
 });
 
