@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const { Pool } = require('pg');
 const multer = require('multer');
+const sharp = require('sharp');
 const path = require('path');
 
 const app = express();
@@ -71,9 +72,14 @@ app.post('/addProduct', upload.single('image'), async (req, res) => {
     const { name, description, category, price, stock } = req.body;
     const image = req.file;
     try {
+        // Otimizar imagem
+        const optimizedImageBuffer = await sharp(image.buffer)
+        .resize(800) // Redimensionar para largura de 800px
+        .jpeg({ quality: 80 }) // Comprimir para qualidade de 80
+        .toBuffer(); // Converter de volta para Buffer
         const result = await pool.query(
             'INSERT INTO Products (Name, Description, Category, Price, Stock, Image) VALUES ($1, $2, $3, $4, $5, $6)',
-            [name, description, category, price, stock, image.buffer]
+            [name, description, category, price, stock, optimizedImageBuffer]
         );
         res.send('Produto cadastrado com sucesso!');
     } catch (err) {
@@ -96,8 +102,8 @@ app.get('/produtos', async (req, res) => {
     }
 });
 
-// Rota para servir imagens
-app.get('/img/:id', async (req, res) => {
+// Rota para servir imagens - ANTIGO
+/* app.get('/img/:id', async (req, res) => {
     const { id } = req.params;
     try {
         const result = await pool.query('SELECT Image FROM products WHERE id = $1', [id]);
@@ -114,7 +120,25 @@ app.get('/img/:id', async (req, res) => {
     } catch (err) {
         res.status(500).send(err.message);
     }
+}); */
+
+// Rota para servir imagens
+app.get('/img/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const result = await pool.query('SELECT Image FROM products WHERE id = $1', [id]);
+        if (result.rows.length > 0) {
+            const image = result.rows[0].image;
+            const imageBase64 = `data:image/jpeg;base64,${image.toString('base64')}`;
+            res.send(imageBase64);
+        } else {
+            res.status(404).send('Imagem não encontrada');
+        }
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
 });
+
 
 // Rota para servir o frontend
 app.get('*', (req, res) => {
