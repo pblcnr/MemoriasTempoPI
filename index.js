@@ -86,7 +86,31 @@ app.post('/addProduct', upload.single('image'), async (req, res) => {
 app.get('/produtos', async (req, res) => {
     try {
         const result = await pool.query('SELECT * FROM products');
-        res.json(result.rows);
+        const produtos = result.rows.map(produto => ({
+            ...produto,
+            imageUrl: `/img/${produto.id}`
+        }));
+        res.json(produtos);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+// Rota para servir imagens
+app.get('/img/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const result = await pool.query('SELECT Image FROM products WHERE id = $1', [id]);
+        if (result.rows.length > 0) {
+            const image = result.rows[0].image;
+            res.writeHead(200, {
+                'Content-Type': 'image/jpeg',
+                'Content-Length': image.length
+            });
+            res.end(image);
+        } else {
+            res.status(404).send('Imagem não encontrada');
+        }
     } catch (err) {
         res.status(500).send(err.message);
     }
