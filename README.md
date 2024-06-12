@@ -20,13 +20,12 @@ O projeto "Memórias do Tempo" é um site web com conexão a um banco de dados r
 
 ## Introdução
 
-O projeto "Memórias do Tempo" visa proporcionar um sistema eficiente para o gerenciamento de produtos antigos da loja, permitindo ao administrador realizar operações CRUD (Create, Read, Update, Delete) de maneira intuitiva e segura.
+O projeto "Memórias do Tempo" visa proporcionar um sistema eficiente para a catalogação de produtos antigos da loja, permitindo ao administrador realizar operações CRUD (Create, Read, Update, Delete) de maneira intuitiva e segura.
 
 ## Requisitos do Sistema
 
 ### Funcionais
 - Cadastro de produtos
-- Atualização de produtos
 - Visualização de produtos
 - Exclusão de produtos
 
@@ -37,18 +36,17 @@ O projeto "Memórias do Tempo" visa proporcionar um sistema eficiente para o ger
 ## Arquitetura do Sistema
 
 ### Tecnologias Utilizadas
-- **Frontend:** HTML, CSS, JavaScript, React.js
+- **Frontend:** HTML, CSS, JavaScript, Vue.js
 - **Backend:** Node.js, Express.js
-- **Banco de Dados:** MySQL
+- **Banco de Dados:** ProstgreSQL
 
 ## Estrutura do Banco de Dados
 
 ### Descrição das Tabelas
 - **Tabela `Produtos`:**
-  - Colunas: id, nome, descrição, ano, valor, imagem, etc.
-- **Tabela `Categorias`:**
-  - Colunas: id, nome
-  - Relacionamento: muitos-para-muitos com `Produtos`
+  - Colunas: id, nome, descrição, ano, valor, estoque, imagem.
+- **Tabela `Usuários`:**
+  - Colunas: id, nome, email e senha.
 
 ## Funcionalidades
 - Página de listagem de produtos
@@ -58,10 +56,10 @@ O projeto "Memórias do Tempo" visa proporcionar um sistema eficiente para o ger
 - Funcionalidade de exclusão de produtos
 
 ## Equipe
-- **Nome 1:** Função e responsabilidades
-- **Nome 2:** Função e responsabilidades
-- **Nome 3:** Função e responsabilidades
-- **Nome 4:** Função e responsabilidades
+- **Dímerson Ferreira:** Banco de Dados
+- **Nathan Bizinoto:** Front-End
+- **Paulo Henrique de Andrade:** Back-End
+- **Vinicius Rodrigues:** Product Owner (PO)
 
 ## Licença
 Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
