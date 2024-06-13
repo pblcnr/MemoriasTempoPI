@@ -47,6 +47,10 @@ O projeto "Memórias do Tempo" visa proporcionar um sistema eficiente para a cat
   - Colunas: id, nome, descrição, ano, valor, estoque, imagem.
 - **Tabela `Usuários`:**
   - Colunas: id, nome, email e senha.
+ 
+### Modelo Conceitual e lógco
+![Diagrama em branco](https://github.com/pblcnr/MemoriasTempoPI/assets/141787258/086fe945-525e-4bee-b4f4-41fb7c999dac)
+
 
 ## Funcionalidades
 - Página de listagem de produtos
